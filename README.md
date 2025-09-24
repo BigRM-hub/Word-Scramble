@@ -1,1 +1,3 @@
-# Word-Scramble
+# Word Scramble
+
+## Overview
