@@ -1,8 +1,4 @@
-# Word Scramble
+# Memory
 
 ## Overview
-Word Scramble is a fun and engaging word puzzle game where players try to rearrange a set of scrambled letters to form a valid word.
-
-## Rules
-Players will pick the length of word they want to unscramble and when correct will be awarded an appropriate ammount of points based on how long their word is.
-Highest score wins!
+To play the memory game, player is presented with a grid of blank tiles, then players take turns “flipping” two tiles, “keeping” them if they match, and taking another turn, but they turn back over if they don't match. Play continues until all pairs are matched, and the player with the most pairs at the end wins.
