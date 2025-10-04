@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MemoryApp
 {
@@ -52,7 +53,7 @@ namespace MemoryApp
             lstButtons = new() { btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, btn11, btn12, btn13, btn14, btn15, btn16, btn17, btn18, btn19, btn20 };
             lstCards = new() { "Bu", "Bu", "20", "20", "XI", "XI", "66", "66", "tt", "tt", "Pr", "Pr", "Fn", "Fn", "!,", "!,", "10", "10", "Me", "Me" };
             lst = new() { "Bu", "Bu", "20", "20", "XI", "XI", "66", "66", "tt", "tt", "Pr", "Pr", "Fn", "Fn", "!,", "!,", "10", "10", "Me", "Me" };
-            //ShuffleList();
+            lstButtons.ForEach(b => b.Enabled = false);
         }
 
         private void ShuffleList()
@@ -171,7 +172,6 @@ namespace MemoryApp
         {
             if (Guess1 == Guess2)
             {
-                //Score + 1
                 TallyScore();
                 lstButtons.Where(b => b.Text != "").ToList().ForEach(b => b.Enabled = false);
             }
@@ -201,10 +201,8 @@ namespace MemoryApp
             ClickCount = ClickCount + 1;
             if (ClickCount == 2)
             {
-                
                 DetectMatch();
                 ClickCount = 0;
-                //SwitchTurn();
             }
         }
 
@@ -216,11 +214,28 @@ namespace MemoryApp
             Guess2 = "GO";
         }
 
+        private void ShowTurn()
+        {
+            if (Turn == "One")
+            {
+                lblPlayerTurn.Text = txtPlayer1.Text;
+            }
+            else
+            {
+                lblPlayerTurn.Text = txtPlayer2.Text;
+            }
+        }
+
         private void DisplayStatus()
         {
             lblP1Score.Text = Score1.ToString();
             lblP2Score.Text = Score2.ToString();
-            lblPlayerTurn.Text = "Player " + Turn;
+            ShowTurn();
+        }
+
+        private void Error()
+        {
+            MessageBox.Show("Please enter player names", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void Reset()
@@ -228,26 +243,45 @@ namespace MemoryApp
             lblPlayer1.Text = txtPlayer1.Text + ":";
             lblPlayer2.Text = txtPlayer2.Text + ":";
             Score1 = 0; Score2 = 0;
+            lblPlayer1.Text = "Player 1:";
             lblP1Score.Text = "";
+            lblPlayer2.Text = "Player 2:";
             lblP2Score.Text = "";
         }
 
         private void BtnStart_Click(object? sender, EventArgs e)
         {
-            ClearTiles();
-            ShuffleList();
-            Reset();
-            lblPlayerTurn.Text = "Player " + Turn;
+            if (txtPlayer1.Text == "" | txtPlayer2.Text == "")
+            {
+                Error();
+            }
+            else
+            {
+                btnStart.Text = btnStart.Text == "START" ? "RESET" : "START";
+                if (btnStart.Text == "RESET")
+                {
+                    ClearTiles();
+                    ShuffleList();
+                    ShowTurn();
+                }
+                else
+                {
+                    txtPlayer1.Text = "";
+                    txtPlayer2.Text = "";
+                    ClearTiles();
+                    Reset();
+                    lstButtons.ForEach(b => b.Enabled = false);
+                    ShowTurn();
+                }
+            }
         }
 
         private void BtnClick(object? sender, EventArgs e)
         {
-
             if (sender is Button)
             {
                 Button btn = (Button)sender;
                 AssignButton(btn);
-                
                 DoTurn();
                 DisplayStatus();
             }
